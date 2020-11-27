@@ -34,7 +34,7 @@ public class ProdutoService {
     public Produto alterarProduto(long id, Produto produto) {
         Optional<Produto> p = repository.findById(id);
         if (p.isPresent()) {
-            p.get().setNome(produto.getNome());
+            p.get().setNomeProduto(produto.getNomeProduto());
             p.get().setPreco(produto.getPreco());
         }
         return repository.save(p.get());

@@ -32,7 +32,7 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<Produto> cadastrarProduto(@RequestBody Produto produto, UriComponentsBuilder uriBuilder) {
-        URI uri = uriBuilder.path("/produto/{id}").buildAndExpand(produto.getId()).toUri();
+        URI uri = uriBuilder.path("/produto/{id}").buildAndExpand(produto.getIdProduto()).toUri();
         return ResponseEntity.created(uri).body(service.cadastrarProduto(produto));
     }
 
