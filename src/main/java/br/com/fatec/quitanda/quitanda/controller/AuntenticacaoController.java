@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/login")
 
-public class Auntenticacao {
+public class AuntenticacaoController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     @PostMapping

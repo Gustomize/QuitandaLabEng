@@ -1,6 +1,7 @@
 package br.com.fatec.quitanda.quitanda.service;
 
 import br.com.fatec.quitanda.quitanda.model.Carrinho;
+import br.com.fatec.quitanda.quitanda.model.Pedido;
 import br.com.fatec.quitanda.quitanda.model.Produto;
 import br.com.fatec.quitanda.quitanda.model.ProdutoPedidoId;
 import br.com.fatec.quitanda.quitanda.repository.CarrinhoRepository;
@@ -20,27 +21,34 @@ public class CarrinhoService {
     private final PedidoRepository pedidoRepository;
     private final ProdutoRepository produtoRepository;
 
-    public List<Carrinho> carrinhos() {
-        return carrinhoRepository.findAll();
+
+    public List<Carrinho> listarItensPedido(Long idPedido) {
+        return carrinhoRepository.listarItensPedido(idPedido);
     }
 
-    public Carrinho listarCarrinho(ProdutoPedidoId id) {
-        return carrinhoRepository.findById(id).orElseThrow(()-> new RuntimeException("Carrinho não encontrado!!"));
+    public Carrinho adicionarAoCarrinho(Long idPedido, Long idProduto, int quantidade) {
+        Pedido pedido = pedidoRepository.findById(idPedido).get();
+        Produto produto = produtoRepository.findById(idProduto).get();
+
+        ProdutoPedidoId id = new ProdutoPedidoId();
+        id.setIdPedido(idPedido);
+        id.setIdProduto(idProduto);
+
+        Carrinho item = new Carrinho();
+        item.setId(id);
+        item.setPedido(pedido);
+        item.setProduto(produto);
+        item.setQuantidade(quantidade);
+
+        return carrinhoRepository.save(item);
     }
 
-    public Carrinho cadastrarCarrinho(Carrinho carrinho) {
-        return carrinhoRepository.save(carrinho);
+    public void removerDoCarrinho(Long idPedido, Long idProduto) {
+        carrinhoRepository.removerDoCarrinho(idPedido, idProduto);
     }
 
-    public void deletarCarrinho(ProdutoPedidoId id) {
-        carrinhoRepository.deleteById(id);
+    public void alterarQuantidade(int quantidade, Long idPedido, Long idProduto) {
+        carrinhoRepository.alterarQuantidade(quantidade, idPedido, idProduto);
     }
 
-    public Produto alterarProduto(ProdutoPedidoId id, Produto produto) {
-        Optional<Carrinho> c = carrinhoRepository.findById(id);
-        if (c.isPresent()) {
-            c.get().set(produto.getNomeProduto());
-        }
-        return carrinhoRepository.save(c.get());
-    }
 }
